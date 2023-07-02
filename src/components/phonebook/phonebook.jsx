@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import css from './phonebook.module.css';
 
@@ -67,3 +68,7 @@ export default class Phonebook extends Component {
     );
   }
 }
+
+Phonebook.propTypes = {
+  onAddContact: PropTypes.func.isRequired,
+};
