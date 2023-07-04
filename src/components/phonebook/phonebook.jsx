@@ -4,29 +4,20 @@ import css from './phonebook.module.css';
 
 export default class Phonebook extends Component {
   state = {
-    contacts: [],
     name: '',
     number: '',
   };
 
   hendleInputChange = event => {
-    console.log(event.target.name);
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
+
   hendeleSubmit = event => {
     event.preventDefault();
-
-    const contacts = {
-      name: this.state.name,
-      number: this.state.number,
-      // number: Number.parseInt(this.state.number),
-    };
-    this.props.onAddContact(contacts);
-
+    this.props.onAddContact({ ...this.state });
     this.setState({
-      contacts: [],
       name: '',
       number: '',
     });

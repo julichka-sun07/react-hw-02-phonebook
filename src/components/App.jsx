@@ -2,6 +2,8 @@ import React from 'react';
 import Phonebook from './phonebook/phonebook';
 import Filter from './filter/filter';
 import ContactList from './ContactList/ContactList';
+import { Notify } from 'notiflix';
+import { nanoid } from 'nanoid';
 
 export class App extends React.Component {
   state = {
@@ -12,33 +14,37 @@ export class App extends React.Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
   onRemoveContact = contactId => {
-    console.log(contactId);
     this.setState({
       contacts: this.state.contacts.filter(contact => contact.id !== contactId),
     });
   };
 
   onAddContact = contacts => {
-    console.log(contacts);
+    const name = this.state.contacts.map(contact => contact.name);
 
-    const finalContact = {
-      ...contacts,
-      id: (Math.random() * 2).toString(),
-    };
+    if (name.includes(contacts.name)) {
+      Notify.warning(`${contacts.name} is already in contant`);
+    } else {
+      this.setState(prevState => ({
+        contacts: [contacts, ...prevState.contacts],
+      }));
 
-    this.setState({
-      contacts: [...this.state.contacts, finalContact],
-    });
+      const finalContact = {
+        ...contacts,
+        id: nanoid(),
+      };
+
+      this.setState({
+        contacts: [...this.state.contacts, finalContact],
+      });
+    }
   };
 
   handleOnChange = e => {
     this.setState({ filter: e.target.value });
-    console.log(this.state.filter);
   };
 
   getContacts = () => {
