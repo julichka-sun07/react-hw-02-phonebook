@@ -17,29 +17,27 @@ export class App extends React.Component {
   };
 
   onRemoveContact = contactId => {
-    this.setState({
-      contacts: this.state.contacts.filter(contact => contact.id !== contactId),
-    });
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
   };
 
   onAddContact = contacts => {
-    const name = this.state.contacts.map(contact => contact.name);
+    const isInContacts = this.state.contacts.some(
+      contact => contact.name.toLowerCase() === contacts.name.toLowerCase()
+    );
 
-    if (name.includes(contacts.name)) {
+    if (isInContacts) {
       Notify.warning(`${contacts.name} is already in contant`);
     } else {
-      this.setState(prevState => ({
-        contacts: [contacts, ...prevState.contacts],
-      }));
-
       const finalContact = {
         ...contacts,
         id: nanoid(),
       };
 
-      this.setState({
-        contacts: [...this.state.contacts, finalContact],
-      });
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, finalContact],
+      }));
     }
   };
 
@@ -56,13 +54,13 @@ export class App extends React.Component {
   };
 
   render() {
-    this.getContacts();
+    const visibleContact = this.getContacts();
     return (
       <div>
         <Phonebook onAddContact={this.onAddContact} />
         <Filter handleOnChange={this.handleOnChange} />
         <ContactList
-          getContacts={this.getContacts}
+          contacts={visibleContact}
           onRemoveContact={this.onRemoveContact}
         />
       </div>

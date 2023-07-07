@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import css from './ContactList.module.css';
 
-const ContactList = ({ getContacts, onRemoveContact }) => {
+const ContactList = ({ contacts, onRemoveContact }) => {
   return (
     <div className={css.div}>
       <ul className={css.ul}>
-        {getContacts().map(contact => (
+        {contacts.map(contact => (
           <li className={css.li} key={contact.id}>
             {contact.name}: {contact.number}
             <button
@@ -24,6 +24,12 @@ const ContactList = ({ getContacts, onRemoveContact }) => {
 export default ContactList;
 
 ContactList.propTypes = {
-  getContacts: PropTypes.func.isRequired,
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   onRemoveContact: PropTypes.func.isRequired,
 };
